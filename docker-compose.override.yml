@@ -1,0 +1,42 @@
+version: '3.4'
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend.Dockerfile
+    environment:
+      PORT: 8080
+    ports:
+    - '8080:8080'
+    networks:
+     - dev-esnet
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend.Dockerfile
+    environment:
+      CACHE_ENDPOINT: 'cache:6379'
+    ports:
+      - '8008:8080'
+    networks:
+     - dev-esnet
+
+  cache:
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    ports:
+      - '6379:6379'
+    volumes:
+      - 'redis_data:/bitnami/redis/data'
+    networks:
+      - dev-esnet
+
+networks:
+  dev-esnet:
+    driver: bridge
+
+volumes:
+  redis_data:
+    driver: local
