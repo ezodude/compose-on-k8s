@@ -1,51 +1,17 @@
 version: '3.4'
 services:
   frontend:
-    build:
-      context: .
-      dockerfile: frontend.Dockerfile
-    image: ezodude/frontend-docker-stack-poc:${TAG:-dev}
-    container_name: frontend-docker-stack-poc
-    environment:
-      PORT: 8080
-    ports:
-    - '8080:8080'
+    image: ezodude/frontend-cok8s:${TAG:-latest}
+    container_name: frontend
     depends_on:
       - backend
-    networks:
-      - dsp-esnet
 
   backend:
-    build:
-      context: .
-      dockerfile: backend.Dockerfile
-    image: ezodude/backend-docker-stack-poc:${TAG:-dev}
-    container_name: backend-docker-stack-poc
-    environment:
-      CACHE_ENDPOINT: 'cache:6379'
+    image: ezodude/backend-cok8s:${TAG:-latest}
+    container_name: backend
     depends_on:
       - cache
-    networks:
-      - dsp-esnet
 
   cache:
     image: docker.io/bitnami/redis:6.0-debian-10
     container_name: cache
-    environment:
-      # ALLOW_EMPTY_PASSWORD is recommended only for development.
-      - ALLOW_EMPTY_PASSWORD=yes
-      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
-    ports:
-      - '6379:6379'
-    volumes:
-      - 'redis_data:/bitnami/redis/data'
-    networks:
-      - dsp-esnet
-
-networks:
-  dsp-esnet:
-    driver: bridge
-
-volumes:
-  redis_data:
-    driver: local
