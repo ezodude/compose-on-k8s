@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: "2020-05-13T16:25:42Z"
+  labels:
+    com.docker.service.id: ck8s-backend
+    com.docker.service.name: backend
+    com.docker.stack.namespace: ck8s
+  name: backend
+  namespace: ck8s-prod
+  ownerReferences:
+  - apiVersion: compose.docker.com/v1alpha3
+    blockOwnerDeletion: true
+    controller: true
+    kind: Stack
+    name: ck8s
+    uid: 63811c31-9536-11ea-96c4-025000000001
+  resourceVersion: "3397"
+  selfLink: /api/v1/namespaces/ck8s-prod/services/backend
+  uid: da684937-6bb9-4b05-9a98-388cfa8c83ae
+spec:
+  clusterIP: None
+  ports:
+  - name: headless
+    port: 55555
+    protocol: TCP
+    targetPort: 55555
+  selector:
+    com.docker.service.id: ck8s-backend
+    com.docker.service.name: backend
+    com.docker.stack.namespace: ck8s
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

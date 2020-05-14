@@ -1,2 +1,12 @@
 # ignore idea editor
 .idea/*
+
+# envs
+*.env
+*.*.env
+
+# secrets
+## Actual secret
+*.secret
+## Actual secret
+*.secrets

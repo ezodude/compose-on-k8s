@@ -1,6 +1,7 @@
-version: '3.4'
+version: '3.5'
 services:
   frontend:
+    image: ezodude/frontend-cok8s:dev
     build:
       context: .
       dockerfile: frontend.Dockerfile
@@ -12,17 +13,23 @@ services:
      - dev-esnet
 
   backend:
+    image: ezodude/backend-cok8s:dev
     build:
       context: .
       dockerfile: backend.Dockerfile
     environment:
       CACHE_ENDPOINT: 'cache:6379'
+      CACHE_PASSWORD: ''
     ports:
       - '8008:8080'
+    depends_on:
+      - cache
     networks:
      - dev-esnet
 
   cache:
+    image: docker.io/bitnami/redis:6.0-debian-10
+    container_name: cache
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
       - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
