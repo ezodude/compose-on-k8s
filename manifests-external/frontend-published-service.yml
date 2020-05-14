@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: "2020-05-14T14:44:27Z"
+  labels:
+    com.docker.service.id: ck8s-frontend
+    com.docker.service.name: frontend
+    com.docker.stack.namespace: ck8s
+  name: frontend-published
+  namespace: ck8s-prod
+  ownerReferences:
+  - apiVersion: compose.docker.com/v1alpha3
+    blockOwnerDeletion: true
+    controller: true
+    kind: Stack
+    name: ck8s
+    uid: 690d98e4-95f1-11ea-96c4-025000000001
+  resourceVersion: "75299"
+  selfLink: /api/v1/namespaces/ck8s-prod/services/frontend-published
+  uid: 4e63aac9-ba37-4af8-9126-18cc51bc255a
+spec:
+  clusterIP: 10.97.198.5
+  externalTrafficPolicy: Cluster
+  ports:
+  - name: 80-tcp
+    nodePort: 30195
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    com.docker.service.id: ck8s-frontend
+    com.docker.service.name: frontend
+    com.docker.stack.namespace: ck8s
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer: {}
