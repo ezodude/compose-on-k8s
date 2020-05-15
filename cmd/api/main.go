@@ -61,7 +61,7 @@ func MustLookupSecretOrEnv(key string) string{
 	if secretPath, ok := os.LookupEnv(secret); ok {
 		data, err := ioutil.ReadFile(secretPath)
 		if err != nil {
-			panic(fmt.Errorf("cannot read data supplied by %s secret, please fix to access cache", secret))
+			panic(fmt.Errorf("cannot read data supplied by %s secret, please fix to access cache:\n[%+v]", secret, err))
 		}
 		log.Printf("SECRET_ENV:[%s], SECRET PATH:[%s], SECRET DATA:[%s]\n", secret, secretPath, string(data))
 		return strings.TrimSpace(string(data))
