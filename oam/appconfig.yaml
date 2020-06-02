@@ -1,0 +1,19 @@
+apiVersion: core.oam.dev/v1alpha2
+kind: ApplicationConfiguration
+metadata:
+  name: docker-stack-poc
+  annotations:
+    version: v0.0.1
+    description: "Description of this deployment"
+spec:
+  components:
+    - componentName: frontend
+    - componentName: backend
+      parameterValues:
+        - name: cache-endpoint-secret
+          value: cache-endpoint
+        - name: cache-password-secret
+          value: cache-password
+
+
+
