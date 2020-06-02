@@ -1,0 +1,59 @@
+---
+apiVersion: core.oam.dev/v1alpha2
+kind: Component
+metadata:
+  name: frontend
+spec:
+  workload:
+    apiVersion: core.oam.dev/v1alpha2
+    kind: ContainerizedWorkload
+    metadata:
+      name: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: ezodude/frontend-cok8s:prod
+          env:
+            - name: PORT
+              value: "8080"
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+---
+apiVersion: core.oam.dev/v1alpha2
+kind: Component
+metadata:
+  name: backend
+spec:
+  workload:
+    apiVersion: core.oam.dev/v1alpha2
+    kind: ContainerizedWorkload
+    metadata:
+      name: backend
+    spec:
+      containers:
+        - name: backend
+          image: ezodude/backend-cok8s:prod
+          env:
+            - name: CACHE_ENDPOINT
+              fromSecret:
+                key: cache-endpoint-secret
+            - name: CACHE_PASSWORD
+              fromSecret:
+                key: cache-password-secret
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+  parameters:
+    - name: cache-endpoint-secret
+      description: Secret for cache-endpoint for Redis Cache.
+      required: true
+      fieldPaths:
+        - "spec.containers[0].env[0].fromSecret.name"
+    - name: cache-password-secret
+      description: Secret for cache-password for Redis Cache.
+      required: true
+      fieldPaths:
+        - "spec.containers[0].env[1].fromSecret.name"
